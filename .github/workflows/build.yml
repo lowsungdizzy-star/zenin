@@ -1,0 +1,30 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build with Buildozer Docker
+        uses: ArtemSBulgakov/buildozer-action@v1
+        with:
+          buildozer_version: stable
+          python_version: 3.11
+          # Эта команда запускает сборку с подробным выводом
+          command: buildozer -v android debug
+          repository_display_name: ZeninApp
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Zenin-APK
+          path: bin/*.apk
+          
